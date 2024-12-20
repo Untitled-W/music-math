@@ -66,7 +66,7 @@ class GeneticAlgorithm:
 
     def _crossover(self, parent1, parent2):
         if random.random() < self.crossover_rate:
-            point = random.rand() * parent1.bars()
+            point = random.random() * parent1.bars()
             return parent1.cut(0, point) + parent2.cut(point, parent2.bars()), \
                    parent2.cut(0, point) + parent1.cut(point, parent1.bars())
         return parent1, parent2
@@ -79,7 +79,7 @@ class GeneticAlgorithm:
 
     def _create_new_population(self, selected):
         new_population = []
-        for i in range(0, self.population_size, 2):
+        for i in range(0, len(selected)-1, 2):
             parent1, parent2 = selected[i], selected[i + 1]
             offspring1, offspring2 = self._crossover(parent1, parent2)
             new_population.append(self._mutate(offspring1))
@@ -88,7 +88,7 @@ class GeneticAlgorithm:
 
     def run(self):
         from tqdm import tqdm
-        for generation in tqdm(range(self.generations)):
+        for generation in range(self.generations):
             selected = self._selection()
             self.population = self._create_new_population(selected)
             best_fitness = max(self.fitness(self.interval_values, self.initial_mean, self.initial_variance, self.tonality_notes, chrom) for chrom in self.population)
